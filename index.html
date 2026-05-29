@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trustly - Connected Safety</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Poppins',sans-serif;
+    }
+
+    :root{
+      --primary:#4d8dff;
+      --secondary:#7c5cff;
+      --danger:#ff4f6d;
+      --success:#2bb673;
+      --warning:#ffb347;
+      --bg:#eef4ff;
+      --card:#ffffff;
+      --text:#112035;
+      --muted:#6d7b8c;
+      --shadow:rgba(0,0,0,.08);
+      --border:#e9edf3;
+    }
+
+    body.dark{
+      --bg:#08111f;
+      --card:#121f33;
+      --text:#f5f7fb;
+      --muted:#a5b2c2;
+      --shadow:rgba(0,0,0,.4);
+      --border:rgba(255,255,255,.08);
+    }
+
+    body{
+      background:linear-gradient(135deg,#dfeaff,#f0ecff,#dff8f2);
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:20px;
+      transition:.3s;
+    }
+
+    body.dark{
+      background:linear-gradient(135deg,#08111f,#111c2d,#152437);
+    }
+
+    .phone{
+      width:400px;
+      height:850px;
+      background:var(--card);
+      border-radius:40px;
+      overflow:hidden;
+      position:relative;
+      box-shadow:0 25px 70px rgba(0,0,0,.18);
+      border:7px solid rgba(255,255,255,.4);
+    }
+
+    .screen{
+      height:100%;
+      overflow-y:auto;
+      padding:24px 22px 95px;
+      display:none;
+      animation:fade .25s ease;
+    }
+
+    .screen.active{
+      display:block;
+    }
+
+    @keyframes fade{
+      from{opacity:0;transform:translateY(10px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+
+    .status{
+      display:flex;
+      justify-content:space-between;
+      font-size:14px;
+      font-weight:700;
+      margin-bottom:18px;
+      color:var(--text);
+    }
+
+    .hero{
+      text-align:center;
+      margin-top:10px;
+      margin-bottom:30px;
+    }
+
+    .hero-icon{
+      font-size:65px;
+      margin-bottom:10px;
+    }
+
+    .hero h1{
+      font-size:38px;
+      letter-spacing:5px;
+      color:var(--primary);
+      margin-bottom:6px;
+    }
+
+    .hero p{
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    .title{
+      font-size:26px;
+      font-weight:800;
+      margin-bottom:20px;
+      color:var(--text);
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:25px;
+    }
+
+    .back,
+    .icon-btn{
+      width:45px;
+      height:45px;
+      border:none;
+      border-radius:15px;
+      cursor:pointer;
+      background:rgba(77,141,255,.12);
+      color:var(--primary);
+      font-size:22px;
+      font-weight:700;
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:24px;
+      padding:20px;
+      margin-bottom:18px;
+      box-shadow:0 12px 30px var(--shadow);
+      border:1px solid var(--border);
+      cursor:pointer;
+      transition:.25s;
+    }
+
+    .card:hover{
+      transform:translateY(-4px);
+    }
+
+    .gradient-blue{
+      background:linear-gradient(135deg,#4d8dff,#79b0ff);
+      color:white;
+    }
+
+    .gradient-purple{
+      background:linear-gradient(135deg,#7c5cff,#aa8dff);
+      color:white;
+    }
+
+    .gradient-red{
+      background:linear-gradient(135deg,#ff4f6d,#ff8a6d);
+      color:white;
+    }
+
+    .gradient-green{
+      background:linear-gradient(135deg,#2bb673,#61d49b);
+      color:white;
+    }
+
+    .card-row{
+      display:flex;
+      align-items:center;
+      gap:18px;
+    }
+
+    .card-icon{
+      font-size:45px;
+      min-width:60px;
+    }
+
+    .card h3{
+      font-size:20px;
+      margin-bottom:5px;
+    }
+
+    .card p{
+      line-height:1.5;
+      font-size:14px;
+    }
+
+    .mini-card{
+      display:flex;
+      align-items:center;
+      gap:15px;
+      padding:18px;
+      background:var(--card);
+      border-radius:18px;
+      margin-bottom:14px;
+      border:1px solid var(--border);
+      box-shadow:0 8px 22px var(--shadow);
+    }
+
+    .mini-icon{
+      width:50px;
+      height:50px;
+      border-radius:15px;
+      display:grid;
+      place-items:center;
+      font-size:25px;
+      background:rgba(77,141,255,.12);
+    }
+
+    .mini-card h4{
+      color:var(--text);
+      margin-bottom:4px;
+    }
+
+    .mini-card p{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .section-title{
+      font-size:20px;
+      font-weight:800;
+      margin:25px 0 15px;
+      color:var(--text);
+    }
+
+    .map-box{
+      height:210px;
+      border-radius:24px;
+      overflow:hidden;
+      position:relative;
+      background:url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1200&auto=format&fit=crop') center/cover;
+      margin-bottom:20px;
+      box-shadow:0 15px 30px var(--shadow);
+    }
+
+    .map-overlay{
+      position:absolute;
+      inset:0;
+      background:linear-gradient(to top,rgba(0,0,0,.65),transparent);
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      color:white;
+    }
+
+    .live-dot{
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      background:#00ff84;
+      box-shadow:0 0 12px #00ff84;
+      display:inline-block;
+      margin-right:8px;
+      animation:pulse 1s infinite;
+    }
+
+    @keyframes pulse{
+      0%{transform:scale(1)}
+      50%{transform:scale(1.4)}
+      100%{transform:scale(1)}
+    }
+
+    .sos-btn{
+      width:100%;
+      border:none;
+      border-radius:22px;
+      padding:18px;
+      background:linear-gradient(135deg,#ff4f6d,#ff7b8d);
+      color:white;
+      font-size:22px;
+      font-weight:800;
+      cursor:pointer;
+      margin-top:10px;
+      box-shadow:0 15px 30px rgba(255,79,109,.3);
+      transition:.25s;
+    }
+
+    .sos-btn:hover{
+      transform:scale(1.02);
+    }
+
+    .alert-box{
+      padding:18px;
+      border-radius:18px;
+      background:rgba(255,79,109,.1);
+      border:1px solid rgba(255,79,109,.2);
+      margin-top:18px;
+      color:var(--text);
+      display:none;
+    }
+
+    .bag-visual{
+      height:250px;
+      border-radius:30px;
+      background:linear-gradient(135deg,#1c2d48,#25395a);
+      position:relative;
+      overflow:hidden;
+      margin-bottom:22px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      box-shadow:0 20px 40px rgba(0,0,0,.2);
+    }
+
+    .bag{
+      width:150px;
+      height:180px;
+      background:linear-gradient(135deg,#4d8dff,#7c5cff);
+      border-radius:35px;
+      position:relative;
+      box-shadow:0 0 25px rgba(77,141,255,.5);
+      transition:.3s;
+    }
+
+    .bag::before{
+      content:'';
+      width:70px;
+      height:35px;
+      border:10px solid white;
+      border-bottom:none;
+      border-radius:30px 30px 0 0;
+      position:absolute;
+      top:-28px;
+      left:30px;
+    }
+
+    .bag-light{
+      position:absolute;
+      width:16px;
+      height:16px;
+      border-radius:50%;
+      background:#fff76a;
+      box-shadow:0 0 18px #fff76a;
+      animation:blink 1s infinite;
+    }
+
+    .light1{top:35px;left:30px}
+    .light2{top:35px;right:30px}
+    .light3{bottom:35px;left:30px}
+    .light4{bottom:35px;right:30px}
+
+    @keyframes blink{
+      0%,100%{opacity:1}
+      50%{opacity:.2}
+    }
+
+    .chat-box{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin-top:15px;
+    }
+
+    .message{
+      max-width:80%;
+      padding:14px;
+      border-radius:18px;
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .parent{
+      background:rgba(77,141,255,.12);
+      align-self:flex-start;
+      color:var(--text);
+    }
+
+    .child{
+      background:linear-gradient(135deg,#7c5cff,#9f87ff);
+      color:white;
+      align-self:flex-end;
+    }
+
+    .bottom-nav{
+      position:absolute;
+      bottom:0;
+      left:0;
+      width:100%;
+      height:82px;
+      background:rgba(255,255,255,.96);
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      border-top:1px solid var(--border);
+      z-index:100;
+    }
+
+    body.dark .bottom-nav{
+      background:#101c2b;
+    }
+
+    .nav-btn{
+      border:none;
+      background:none;
+      cursor:pointer;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .nav-btn span{
+      display:block;
+      font-size:24px;
+      margin-bottom:4px;
+    }
+
+    .nav-btn.active{
+      color:var(--primary);
+    }
+
+    .theme-toggle{
+      position:absolute;
+      top:22px;
+      right:22px;
+      width:50px;
+      height:50px;
+      border-radius:16px;
+      border:none;
+      background:rgba(255,255,255,.2);
+      color:white;
+      font-size:22px;
+      cursor:pointer;
+      backdrop-filter:blur(10px);
+    }
+
+    .notification{
+      position:absolute;
+      top:20px;
+      left:50%;
+      transform:translateX(-50%);
+      background:var(--card);
+      color:var(--text);
+      padding:16px 20px;
+      border-radius:18px;
+      box-shadow:0 15px 30px var(--shadow);
+      z-index:200;
+      display:none;
+      width:88%;
+      border:1px solid var(--border);
+    }
+
+    .notification.show{
+      display:block;
+      animation:fade .25s ease;
+    }
+
+    .profile-box{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-top:25px;
+    }
+
+    .profile-btn{
+      border:none;
+      border-radius:22px;
+      padding:22px;
+      cursor:pointer;
+      color:white;
+      font-size:17px;
+      font-weight:700;
+      transition:.25s;
+    }
+
+    .profile-btn:hover{
+      transform:translateY(-4px);
+    }
+
+    .battery{
+      margin-top:15px;
+      padding:18px;
+      border-radius:18px;
+      background:rgba(43,182,115,.12);
+      border:1px solid rgba(43,182,115,.2);
+    }
+
+    .battery-bar{
+      height:12px;
+      background:rgba(43,182,115,.2);
+      border-radius:20px;
+      overflow:hidden;
+      margin-top:10px;
+    }
+
+    .battery-level{
+      height:100%;
+      width:82%;
+      background:linear-gradient(90deg,#2bb673,#7ee7b4);
+      border-radius:20px;
+    }
+
+    @media(max-width:450px){
+      body{
+        padding:0;
+      }
+
+      .phone{
+        width:100vw;
+        height:100vh;
+        border-radius:0;
+        border:none;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="phone">
+
+  <div class="notification" id="notif">
+    🚨 Alerte SOS reçue ! Position envoyée au parent.
+  </div>
+
+  <section class="screen active" id="home">
+
+    <div class="status">
+      <span>9:41</span>
+      <span>📶 🔋 92%</span>
+    </div>
+
+    <div class="hero">
+      <div class="hero-icon">🎒🛰️</div>
+      <h1>TRUSTLY</h1>
+      <p>
+        Be safe, trust us.<br>
+        Une application intelligente pour protéger les enfants et les femmes.
+      </p>
+    </div>
+
+    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+
+    <div class="profile-box">
+
+      <button class="profile-btn gradient-blue" onclick="showScreen('parent')">
+        👨‍👩‍👧<br><br>
+        Profil Parent
+      </button>
+
+      <button class="profile-btn gradient-purple" onclick="showScreen('child')">
+        🧒<br><br>
+        Profil Enfant
+      </button>
+
+    </div>
+
+    <div class="section-title">Fonctionnalités principales</div>
+
+    <div class="card gradient-blue">
+      <div class="card-row">
+        <div class="card-icon">📍</div>
+        <div>
+          <h3>Localisation GPS</h3>
+          <p>Suivi en temps réel de l’enfant grâce au système GPS intégré.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card gradient-red">
+      <div class="card-row">
+        <div class="card-icon">🚨</div>
+        <div>
+          <h3>SOS d’urgence</h3>
+          <p>Un bouton physique ou numérique permet d’envoyer une alerte instantanée.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card gradient-green">
+      <div class="card-row">
+        <div class="card-icon">💡</div>
+        <div>
+          <h3>Sac lumineux connecté</h3>
+          <p>Le sac s’illumine automatiquement pour améliorer la visibilité la nuit.</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="screen" id="parent">
+
+    <div class="status">
+      <span>9:41</span>
+      <span>📶 🔋 92%</span>
+    </div>
+
+    <div class="topbar">
+      <button class="back" onclick="showScreen('home')">‹</button>
+      <div class="title">Profil Parent</div>
+      <button class="icon-btn">👨‍👩‍👧</button>
+    </div>
+
+    <div class="map-box">
+      <div class="map-overlay">
+        <div>
+          <span class="live-dot"></span>
+          Localisation en direct
+        </div>
+
+        <h2 style="margin-top:8px">Enfant localisé</h2>
+        <p>Centre-ville — Position sécurisée</p>
+      </div>
+    </div>
+
+    <div class="mini-card">
+      <div class="mini-icon">📍</div>
+      <div>
+        <h4>Position actuelle</h4>
+        <p>Rue Mohammed V — Tanger</p>
+      </div>
+    </div>
+
+    <div class="mini-card">
+      <div class="mini-icon">🕒</div>
+      <div>
+        <h4>Dernière activité</h4>
+        <p>Mis à jour il y a 30 secondes</p>
+      </div>
+    </div>
+
+    <div class="mini-card">
+      <div class="mini-icon">🔔</div>
+      <div>
+        <h4>Alertes intelligentes</h4>
+        <p>Notification en cas de danger ou d’urgence.</p>
+      </div>
+    </div>
+
+    <div class="battery">
+      <strong>🔋 Batterie du sac connecté : 82%</strong>
+      <div class="battery-bar">
+        <div class="battery-level"></div>
+      </div>
+    </div>
+
+    <button class="sos-btn" onclick="triggerSOS()">
+      TESTER UNE ALERTE SOS
+    </button>
+
+    <div class="alert-box" id="alertBox">
+      🚨 Le parent a reçu une alerte SOS avec la position exacte de l’enfant.
+    </div>
+
+  </section>
+
+  <section class="screen" id="child">
+
+    <div class="status">
+      <span>9:41</span>
+      <span>📶 🔋 92%</span>
+    </div>
+
+    <div class="topbar">
+      <button class="back" onclick="showScreen('home')">‹</button>
+      <div class="title">Profil Enfant</div>
+      <button class="icon-btn">🧒</button>
+    </div>
+
+    <div class="card gradient-purple">
+      <div class="card-row">
+        <div class="card-icon">🛡️</div>
+        <div>
+          <h3>Mode Sécurité activé</h3>
+          <p>Tu es connecté à ton parent en temps réel.</p>
+        </div>
+      </div>
+    </div>
+
+    <button class="sos-btn" onclick="triggerSOS()">
+      🚨 ENVOYER UN SOS
+    </button>
+
+    <div class="section-title">Communication</div>
+
+    <div class="chat-box">
+
+      <div class="message parent">
+        Bonjour 👋
+        Tu es bien arrivé à l’école ?
+      </div>
+
+      <div class="message child">
+        Oui maman 😊
+        Tout va bien.
+      </div>
+
+      <div class="message parent">
+        Très bien ❤️
+        Fais attention sur le chemin.
+      </div>
+
+    </div>
+
+    <div class="section-title">Fonctions rapides</div>
+
+    <div class="mini-card">
+      <div class="mini-icon">📞</div>
+      <div>
+        <h4>Appel rapide</h4>
+        <p>Contacter un parent immédiatement.</p>
+      </div>
+    </div>
+
+    <div class="mini-card">
+      <div class="mini-icon">💬</div>
+      <div>
+        <h4>Message sécurisé</h4>
+        <p>Envoyer un message rapide au parent.</p>
+      </div>
+    </div>
+
+    <div class="mini-card">
+      <div class="mini-icon">📡</div>
+      <div>
+        <h4>GPS automatique</h4>
+        <p>Position partagée automatiquement.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="screen" id="bag">
+
+    <div class="status">
+      <span>9:41</span>
+      <span>📶 🔋 92%</span>
+    </div>
+
+    <div class="topbar">
+      <button class="back" onclick="showScreen('home')">‹</button>
+      <div class="title">Sac connecté</div>
+      <button class="icon-btn">🎒</button>
+    </div>
+
+    <div class="bag-visual">
+
+      <div class="bag">
+
+        <div class="bag-light light1"></div>
+        <div class="bag-light light2"></div>
+        <div class="bag-light light3"></div>
+        <div class="bag-light light4"></div>
+
+      </div>
+
+    </div>
+
+    <div class="card gradient-green">
+      <div class="card-row">
+        <div class="card-icon">💡</div>
+        <div>
+          <h3>Éclairage intelligent</h3>
+          <p>Le sac améliore la visibilité la nuit pour protéger l’utilisateur.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card gradient-red">
+      <div class="card-row">
+        <div class="card-icon">🔴</div>
+        <div>
+          <h3>Bouton SOS physique</h3>
+          <p>Un bouton intégré au sac permet d’envoyer un SOS instantanément.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card gradient-blue">
+      <div class="card-row">
+        <div class="card-icon">📶</div>
+        <div>
+          <h3>Connexion intelligente</h3>
+          <p>Le sac communique directement avec l’application mobile.</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="screen" id="about">
+
+    <div class="status">
+      <span>9:41</span>
+      <span>📶 🔋 92%</span>
+    </div>
+
+    <div class="topbar">
+      <button class="back" onclick="showScreen('home')">‹</button>
+      <div class="title">À propos</div>
+      <button class="icon-btn">ℹ️</button>
+    </div>
+
+    <div class="card gradient-blue">
+      <h3>🌍 Vision du projet</h3>
+      <p style="margin-top:10px;line-height:1.8">
+        Trustly est un système intelligent de sécurité conçu pour protéger les enfants et les femmes grâce à un sac connecté et une application mobile.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3 style="color:var(--text)">✨ Objectifs</h3>
+
+      <div class="mini-card" style="margin-top:18px">
+        <div class="mini-icon">🛡️</div>
+        <div>
+          <h4>Améliorer la sécurité</h4>
+          <p>Protection en temps réel grâce au GPS et au SOS.</p>
+        </div>
+      </div>
+
+      <div class="mini-card">
+        <div class="mini-icon">👨‍👩‍👧</div>
+        <div>
+          <h4>Rassurer les parents</h4>
+          <p>Communication rapide et suivi intelligent.</p>
+        </div>
+      </div>
+
+      <div class="mini-card">
+        <div class="mini-icon">🌃</div>
+        <div>
+          <h4>Sécurité nocturne</h4>
+          <p>Visibilité améliorée avec le sac lumineux.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <nav class="bottom-nav">
+
+    <button class="nav-btn active" onclick="showScreen('home',this)">
+      <span>⌂</span>
+      Accueil
+    </button>
+
+    <button class="nav-btn" onclick="showScreen('parent',this)">
+      <span>📍</span>
+      Parent
+    </button>
+
+    <button class="nav-btn" onclick="showScreen('child',this)">
+      <span>🚨</span>
+      SOS
+    </button>
+
+    <button class="nav-btn" onclick="showScreen('bag',this)">
+      <span>🎒</span>
+      Sac
+    </button>
+
+  </nav>
+
+</div>
+
+<script>
+
+  let darkMode=false;
+
+  function showScreen(id,btn){
+
+    document.querySelectorAll('.screen').forEach(screen=>{
+      screen.classList.remove('active');
+    });
+
+    document.getElementById(id).classList.add('active');
+
+    document.querySelectorAll('.nav-btn').forEach(button=>{
+      button.classList.remove('active');
+    });
+
+    if(btn){
+      btn.classList.add('active');
+    }
+  }
+
+  function toggleTheme(){
+    darkMode=!darkMode;
+    document.body.classList.toggle('dark');
+  }
+
+  function triggerSOS(){
+
+    const notif=document.getElementById('notif');
+    const alertBox=document.getElementById('alertBox');
+
+    notif.classList.add('show');
+
+    if(alertBox){
+      alertBox.style.display='block';
+    }
+
+    navigator.vibrate?.([200,100,200]);
+
+    setTimeout(()=>{
+      notif.classList.remove('show');
+    },4000);
+  }
+
+</script>
+
+</body>
+</html>
+
